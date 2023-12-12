@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import turtle
 
 class TreeNode:
@@ -11,8 +11,13 @@ class TreeNode:
 # Inicializar a variável tree_root fora do loop
 tree_root = None
 
+# Lista para armazenar os contatos na ordem de adição
+contacts_added_order = []
+
 def insert_contact(root, name):
+    global contacts_added_order
     if root is None:
+        contacts_added_order.append(name)
         return TreeNode(name)
 
     if name < root.name:
@@ -46,6 +51,20 @@ def min_value_node(node):
     while current.left is not None:
         current = current.left
     return current
+
+def in_order_traversal(node, result):
+    if node is not None:
+        in_order_traversal(node.left, result)
+        result.append(node.name)
+        in_order_traversal(node.right, result)
+
+def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[0]
+    lesser = [x for x in arr[1:] if x < pivot]
+    greater = [x for x in arr[1:] if x >= pivot]
+    return quicksort(lesser) + [pivot] + quicksort(greater)
 
 def display_tree(tree, tree_view):
     tree_view.delete(*tree_view.get_children())  # Limpar a visualização atual
@@ -107,6 +126,17 @@ def on_show_tree():
     turtle_pen.clear()
     draw_tree(tree_root, 0, 0, 200, turtle_pen)
 
+def on_show_alphabetical_order():
+    global tree_root
+    result = []
+    in_order_traversal(tree_root, result)
+    sorted_result = quicksort(result)
+    messagebox.showinfo("Visualizar Ordem Alfabética", "\n".join(sorted_result))
+
+def on_show_added_order():
+    global contacts_added_order
+    messagebox.showinfo("Visualizar Ordem de Adição", "\n".join(contacts_added_order))
+
 # Criar a janela principal
 root = tk.Tk()
 root.title("Árvore de Contatos")
@@ -131,6 +161,14 @@ button_delete.grid(row=2, column=0, columnspan=3, padx=5, pady=5)
 # Função para exibir a árvore inicial
 button_show_tree = ttk.Button(root, text="Visualizar Árvore", command=on_show_tree)
 button_show_tree.grid(row=3, column=0, columnspan=3, padx=5, pady=5)
+
+# Botão para visualizar contatos em ordem alfabética
+button_show_alphabetical_order = ttk.Button(root, text="Visualizar Ordem Alfabética", command=on_show_alphabetical_order)
+button_show_alphabetical_order.grid(row=4, column=0, columnspan=3, padx=5, pady=5)
+
+# Botão para visualizar contatos na ordem de adição
+button_show_added_order = ttk.Button(root, text="Visualizar Ordem de Adição", command=on_show_added_order)
+button_show_added_order.grid(row=5, column=0, columnspan=3, padx=5, pady=5)
 
 # Configuração do Turtle
 turtle_screen = turtle.Screen()
