@@ -1,17 +1,14 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import turtle
-
 class TreeNode:
     def __init__(self, name):
         self.name = name
         self.left = None
         self.right = None
 
-# Inicializar a variável tree_root fora do loop
 tree_root = None
 
-# Lista para armazenar os contatos na ordem de adição
 contacts_added_order = []
 
 def insert_contact(root, name):
@@ -67,7 +64,7 @@ def quicksort(arr):
     return quicksort(lesser) + [pivot] + quicksort(greater)
 
 def display_tree(tree, tree_view):
-    tree_view.delete(*tree_view.get_children())  # Limpar a visualização atual
+    tree_view.delete(*tree_view.get_children())
 
     def display_node(node, parent=''):
         if node is not None:
@@ -82,16 +79,15 @@ def draw_tree(node, x, y, x_spacing, turtle_pen):
         turtle_pen.penup()
         turtle_pen.goto(x, y)
         turtle_pen.pendown()
-        turtle_pen.circle(20)  # Desenha um círculo para representar o nó
+        turtle_pen.circle(20)
 
         turtle_pen.penup()
         turtle_pen.goto(x, y - 20)
         turtle_pen.pendown()
-        turtle_pen.write(node.name, align="center")  # Escreve o nome do nó
+        turtle_pen.write(node.name, align="center")
 
         if node.left is not None:
             draw_tree(node.left, x - x_spacing, y - 50, x_spacing / 2, turtle_pen)
-            # Desenha a linha para o nó filho à esquerda
             turtle_pen.penup()
             turtle_pen.goto(x, y - 20)
             turtle_pen.pendown()
@@ -99,7 +95,6 @@ def draw_tree(node, x, y, x_spacing, turtle_pen):
 
         if node.right is not None:
             draw_tree(node.right, x + x_spacing, y - 50, x_spacing / 2, turtle_pen)
-            # Desenha a linha para o nó filho à direita
             turtle_pen.penup()
             turtle_pen.goto(x, y - 20)
             turtle_pen.pendown()
@@ -137,11 +132,9 @@ def on_show_added_order():
     global contacts_added_order
     messagebox.showinfo("Visualizar Ordem de Adição", "\n".join(contacts_added_order))
 
-# Criar a janela principal
 root = tk.Tk()
 root.title("Árvore de Contatos")
 
-# Criar uma entrada para adicionar contatos
 label_contact = ttk.Label(root, text="Nome do Contato:")
 label_contact.grid(row=0, column=0, padx=5, pady=5, sticky='e')
 entry_contact = ttk.Entry(root, width=20)
@@ -149,31 +142,24 @@ entry_contact.grid(row=0, column=1, padx=5, pady=5)
 button_add = ttk.Button(root, text="Adicionar Contato", command=on_add_contact)
 button_add.grid(row=0, column=2, padx=5, pady=5)
 
-# Criar uma árvore para visualizar os contatos
 tree_view = ttk.Treeview(root)
 tree_view.heading("#0", text="Contatos")
 tree_view.grid(row=1, column=0, columnspan=3, padx=5, pady=5)
 
-# Criar um botão para excluir contatos
 button_delete = ttk.Button(root, text="Excluir Contato", command=on_delete_contact)
 button_delete.grid(row=2, column=0, columnspan=3, padx=5, pady=5)
 
-# Função para exibir a árvore inicial
 button_show_tree = ttk.Button(root, text="Visualizar Árvore", command=on_show_tree)
 button_show_tree.grid(row=3, column=0, columnspan=3, padx=5, pady=5)
 
-# Botão para visualizar contatos em ordem alfabética
 button_show_alphabetical_order = ttk.Button(root, text="Visualizar Ordem Alfabética", command=on_show_alphabetical_order)
 button_show_alphabetical_order.grid(row=4, column=0, columnspan=3, padx=5, pady=5)
 
-# Botão para visualizar contatos na ordem de adição
 button_show_added_order = ttk.Button(root, text="Visualizar Ordem de Adição", command=on_show_added_order)
 button_show_added_order.grid(row=5, column=0, columnspan=3, padx=5, pady=5)
 
-# Configuração do Turtle
 turtle_screen = turtle.Screen()
 turtle_screen.title("Árvore de Contatos")
 turtle_pen = turtle.Turtle()
 
-# Executar a interface gráfica
 root.mainloop()
